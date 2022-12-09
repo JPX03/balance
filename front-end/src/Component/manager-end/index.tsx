@@ -5,9 +5,10 @@ import {
   UserOutlined,
   VideoCameraOutlined,
   HomeOutlined,
+  AliwangwangOutlined,
 } from "@ant-design/icons";
 import { Layout, Menu } from "antd";
-import { AliwangwangOutlined } from "@ant-design/icons";
+
 import UserList from "./users/userList";
 
 const { Header, Sider, Content } = Layout;
