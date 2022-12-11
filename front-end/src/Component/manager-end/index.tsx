@@ -7,9 +7,10 @@ import {
   HomeOutlined,
   AliwangwangOutlined,
 } from "@ant-design/icons";
-import { Layout, Menu } from "antd";
+import { Layout, Menu, Button } from "antd";
 
 import UserList from "./users/userList";
+import UserDetails from "./users/userDetails";
 
 const { Header, Sider, Content } = Layout;
 
@@ -44,11 +45,13 @@ const ManagerHome: React.FC = () => {
                   key: "user-List",
                   icon: <UserOutlined />,
                   label: "用户列表",
-                },
-                {
-                  key: "user-details",
-                  icon: <UserOutlined />,
-                  label: "用户详情",
+                  children: [
+                    {
+                      key: "user-details",
+                      icon: <UserOutlined />,
+                      label: "用户详情",
+                    },
+                  ],
                 },
               ],
             },
@@ -78,6 +81,9 @@ const ManagerHome: React.FC = () => {
             className: "trigger",
             onClick: () => setCollapsed(!collapsed),
           })}
+          <Button type="primary" size="small" style={{ position: "absolute", right: 40, top: 20 }}>
+            退出
+          </Button>
         </Header>
         <Content
           className="site-layout-background"
@@ -88,6 +94,7 @@ const ManagerHome: React.FC = () => {
           }}
         >
           <UserList></UserList>
+          <UserDetails></UserDetails>
         </Content>
       </Layout>
     </Layout>
