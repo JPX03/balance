@@ -64,11 +64,13 @@ const ManagerHome: React.FC = () => {
                   key: "forum-List",
                   icon: <UserOutlined />,
                   label: "帖子列表",
-                },
-                {
-                  key: "forum-details",
-                  icon: <UserOutlined />,
-                  label: "帖子详情",
+                  children: [
+                    {
+                      key: "forum-details",
+                      icon: <UserOutlined />,
+                      label: "帖子详情",
+                    },
+                  ],
                 },
               ],
             },
