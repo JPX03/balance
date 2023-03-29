@@ -1,23 +1,19 @@
 import React from "react";
-import ManagerHome from "./Component/manager-end";
-import "./App.css";
+import { NavLink, useRoutes } from "react-router-dom";
+import routes from "./routers";
 
 const App = () => {
+  const element = useRoutes(routes);
   return (
     <div>
-      <ManagerHome></ManagerHome>
+      <div>
+        <NavLink to="/client">我是用户</NavLink>
+      </div>
+      <div>
+        <NavLink to="/manager">我是管理员</NavLink>
+      </div>
+      <div>{element}</div>
     </div>
-    // <div className="App">
-    //   <header className="App-header">
-    //     <img src={logo} className="App-logo" alt="logo" />
-    //     <p>
-    //       Edit <code>src/App.tsx</code> and save to reload.
-    //     </p>
-    //     <a className="App-link" href="https://reactjs.org" target="_blank" rel="noopener noreferrer">
-    //       Learn React
-    //     </a>
-    //   </header>
-    // </div>
   );
 };
 
