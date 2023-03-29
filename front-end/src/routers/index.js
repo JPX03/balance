@@ -13,7 +13,7 @@ export default [
   {
     path: "/client",
     element: <ClientHome></ClientHome>,
-    chidren: [
+    children: [
       { path: "", element: <ClientIndex></ClientIndex> },
       { path: "home", element: <ClientIndex></ClientIndex> },
       { path: "discuss", element: <Discuss></Discuss> },

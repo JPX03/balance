@@ -6,12 +6,12 @@ const App = () => {
   const element = useRoutes(routes);
   return (
     <div>
-      <div>
+      {/* <div>
         <NavLink to="/client">我是用户</NavLink>
       </div>
       <div>
         <NavLink to="/manager">我是管理员</NavLink>
-      </div>
+      </div> */}
       <div>{element}</div>
     </div>
   );
