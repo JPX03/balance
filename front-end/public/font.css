@@ -1,0 +1,27 @@
+@font-face {
+  font-family: AlibabaPuHuiTi;
+  src: url("./fonts/AlibabaPuHuiTiLight.ttf");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: FZBaoSongZ04S;
+  src: url("./fonts/FZBaoSongZ04S.ttf");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: PingFangSCExtraLight;
+  src: url("./fonts/PingFangExtraLight.ttf");
+  font-weight: initial;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: PingFangRegular;
+  src: url("./fonts/PingFangRegular.ttf");
+  font-weight: normal;
+  font-style: normal;
+}

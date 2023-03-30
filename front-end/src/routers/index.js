@@ -1,9 +1,11 @@
 import { Navigate } from "react-router-dom";
 import ManagerHome from "../pages/managerEnd";
 import ClientHome from "../pages/clientEnd";
+import ClientIndex from "../pages/clientEnd/clientIndex";
+import Article from "../pages/clientEnd/article";
 import Discuss from "../pages/clientEnd/discuss";
 import Information from "../pages/clientEnd/information";
-import ClientIndex from "../pages/clientEnd/clientIndex";
+import Health from "../pages/clientEnd/health";
 
 export default [
   {
@@ -16,12 +18,14 @@ export default [
     children: [
       { path: "", element: <ClientIndex></ClientIndex> },
       { path: "home", element: <ClientIndex></ClientIndex> },
+      { path: "article", element: <Article></Article> },
       { path: "discuss", element: <Discuss></Discuss> },
+      { path: "health", element: <Health></Health> },
       { path: "information", element: <Information></Information> },
     ],
   },
   {
     path: "/",
-    element: <div>404</div>,
+    element: <ClientHome></ClientHome>,
   },
 ];

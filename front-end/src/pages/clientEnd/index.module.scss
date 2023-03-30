@@ -1,0 +1,27 @@
+.root {
+  width: 99vw;
+  font-family: "PingFangSCExtraLight";
+
+  .top {
+    height: 5vh;
+    background-color: rgba(177, 243, 243, 1);
+    border-bottom: 0.6px solid rgba(0, 0, 0, 1);
+  }
+
+  .home {
+    margin-left: 10vw;
+  }
+
+  .title {
+    color: rgb(71, 71, 71);
+    line-height: 5vh;
+    font-size: 1.6vh;
+  }
+
+  .foot {
+    background-color: rgba(177, 243, 243, 1);
+    height: 30vh;
+    line-height: 30vh;
+    font-family: "FZBaoSongZ04S";
+  }
+}

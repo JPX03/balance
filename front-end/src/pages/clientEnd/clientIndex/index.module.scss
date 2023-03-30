@@ -1,0 +1,30 @@
+.root {
+  width: 100%;
+
+  .img1 {
+    height: 60vh;
+    width: 100%;
+    border-bottom: 0.6px solid rgba(0, 0, 0, 1);
+  }
+  .month {
+    margin-top: 10vh;
+    margin-left: 49vw;
+  }
+  .day {
+    margin-left: 51vw;
+  }
+  .img2 {
+    height: 10vh;
+    width: 10vh;
+    position: absolute;
+    left: 48vw;
+    top: 75vh;
+  }
+  .img3 {
+    width: 100%;
+  }
+  .title {
+    margin-top: 10vh;
+    margin-left: 45vw;
+  }
+}

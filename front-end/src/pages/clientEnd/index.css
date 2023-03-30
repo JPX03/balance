@@ -1,9 +1,0 @@
-#container {
-  width: 100vw;
-}
-
-#top {
-  height: 5vh;
-  background-color: rgba(177, 243, 243, 1);
-  border-bottom: 0.6px solid rgba(0, 0, 0, 1);
-}
