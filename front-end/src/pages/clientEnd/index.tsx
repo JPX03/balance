@@ -4,7 +4,7 @@ import { Col, Row } from "antd-v5";
 
 import styles from "./index.module.scss";
 
-const ClientHome = () => {
+const ClientHome: React.FC = () => {
   return (
     <div className={styles.root}>
       <div className={styles.top}>

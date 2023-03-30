@@ -27,7 +27,7 @@ export default [
     ],
   },
   {
-    path: "/",
-    element: <ClientHome></ClientHome>,
+    path: "",
+    element: <Navigate to="/client"></Navigate>,
   },
 ];

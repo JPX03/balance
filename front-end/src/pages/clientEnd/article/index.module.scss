@@ -1,13 +1,128 @@
 .root {
-  width: 80%;
+  width: 60%;
   margin: 0 auto;
-  background-color: cornsilk;
 
-  .randomArticle {
-    height: 50vh;
+  .randomArticleContainer {
+    height: 55vh;
+    margin-top: 10vh;
+    font-family: PingFangRegular;
+
+    .randomArticleTitle {
+      font-size: large;
+      height: 5vh;
+    }
+
+    .randomArticle {
+      border: 0.6px solid rgba(0, 0, 0, 1);
+      height: 50vh;
+      position: relative;
+    }
+
+    .box1 {
+      position: absolute;
+      height: 50vh;
+      width: 20vw;
+      border-right: 0.6px solid black;
+    }
+
+    .article1 {
+      position: absolute;
+      width: 20vw;
+      height: 35vh;
+      left: 0;
+      top: 0;
+    }
+
+    .description1 {
+      position: absolute;
+      top: 40vh;
+      left: 2vw;
+    }
+
+    .box2 {
+      position: absolute;
+      height: 25vh;
+      width: 39vw;
+      left: 20vw;
+      border-bottom: 0.6px solid #000;
+    }
+
+    .description2 {
+      position: absolute;
+      top: 10vh;
+      left: 2vw;
+    }
+
+    .article2 {
+      position: absolute;
+      height: 25vh;
+      right: 0;
+      top: 0;
+    }
+
+    .box3 {
+      position: absolute;
+      height: 25vh;
+      width: 40vw;
+      left: 20.1vw;
+      top: 25vh;
+    }
+
+    .article3 {
+      position: absolute;
+      height: 24.9vh;
+      left: 0;
+      top: 0.1vh;
+    }
+
+    .description3 {
+      position: absolute;
+      top: 5vh;
+      left: 30vw;
+    }
   }
 
-  .articleList {
-    height: 100vh;
+  .articleListContainer {
+    font-family: PingFangRegular;
+    height: 120vh;
+    margin-top: 10vh;
+
+    .listTitle {
+      font-size: large;
+      height: 5vh;
+    }
+
+    .articleBlock {
+      position: relative;
+      height: 15vh;
+      width: 50vw;
+      margin-top: 1vh;
+    }
+
+    .article4 {
+      position: absolute;
+      height: 15vh;
+    }
+
+    .blockTitle {
+      position: absolute;
+      width: 25vw;
+      left: 15vw;
+      top: 1vh;
+      font-size: medium;
+    }
+
+    .blockContent {
+      position: absolute;
+      width: 25vw;
+      left: 15vw;
+      top: 5vh;
+      font-size: small;
+      font-family: PingFangSCExtraLight;
+    }
+
+    .pagination {
+      margin-top: 5vh;
+    }
   }
 }
