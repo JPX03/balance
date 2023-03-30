@@ -1,6 +1,6 @@
 import React from "react";
 import { NavLink, Outlet } from "react-router-dom";
-import { Col, Row } from "antd";
+import { Col, Row } from "antd-v5";
 
 import styles from "./index.module.scss";
 
@@ -28,7 +28,7 @@ const ClientHome = () => {
           </Col>
           <Col span={3}>
             <NavLink to="health" className={styles.title}>
-              数据
+              健康
             </NavLink>
           </Col>
           <Col span={3}>
@@ -59,7 +59,7 @@ const ClientHome = () => {
             </NavLink>
           </Col>
           <Col span={3}>
-            <NavLink to="Health" className={styles.title}>
+            <NavLink to="health" className={styles.title}>
               健康
             </NavLink>
           </Col>

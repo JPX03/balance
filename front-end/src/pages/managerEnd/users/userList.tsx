@@ -1,9 +1,9 @@
 import React, { useState, useRef } from "react";
-import { Space, Table, Tag, Button, Input } from "antd";
-import type { InputRef } from "antd";
+import { Space, Table, Tag, Button, Input } from "antd-v5";
+import type { InputRef } from "antd-v5";
 import { SearchOutlined } from "@ant-design/icons";
-import type { ColumnsType, ColumnType } from "antd/es/table";
-import type { FilterConfirmProps } from "antd/es/table/interface";
+import type { ColumnsType, ColumnType } from "antd-v5/es/table";
+import type { FilterConfirmProps } from "antd-v5/es/table/interface";
 
 interface DataType {
   key: string;

@@ -7,7 +7,7 @@ import {
   HomeOutlined,
   AliwangwangOutlined,
 } from "@ant-design/icons";
-import { Layout, Menu, Button } from "antd";
+import { Layout, Menu, Button } from "antd-v5";
 
 import UserList from "./users/userList";
 import UserDetails from "./users/userDetails";

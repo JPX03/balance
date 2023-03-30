@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { Descriptions, Layout, Space, Table, Tag, Button } from "antd";
-import type { ColumnsType } from "antd/es/table";
+import { Descriptions, Layout, Space, Table, Tag, Button } from "antd-v5";
+import type { ColumnsType } from "antd-v5/es/table";
 
 const { Content } = Layout;
 
