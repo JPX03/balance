@@ -9,7 +9,6 @@ import Discuss from "../pages/clientEnd/discuss";
 import Ask from "../pages/clientEnd/discuss/ask";
 import Information from "../pages/clientEnd/information";
 import Health from "../pages/clientEnd/health";
-import Register from "../pages/clientEnd/register";
 
 //管理员端
 import ManagerHome from "../pages/managerEnd";
@@ -19,6 +18,9 @@ import UserDetails from "../pages/managerEnd/users/userDetails";
 import ForumList from "../pages/managerEnd/forums/forumList";
 import ForumDetails from "../pages/managerEnd/forums/forumDetails";
 import DiscussDetails from "../pages/clientEnd/discuss/details";
+
+//登陆注册
+import Register from "../pages/register";
 
 export default [
   {
@@ -34,7 +36,6 @@ export default [
       { path: "ask", element: <Ask></Ask> },
       { path: "health", element: <Health></Health> },
       { path: "information", element: <Information></Information> },
-      { path: "register", element: <Register></Register> },
     ],
   },
   {
@@ -49,6 +50,7 @@ export default [
       { path: "forumDetails", element: <ForumDetails></ForumDetails> },
     ],
   },
+  { path: "/register", element: <Register></Register> },
   {
     path: "",
     element: <Navigate to="/client"></Navigate>,

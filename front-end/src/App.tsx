@@ -5,7 +5,7 @@ import routes from "./routers";
 const App: React.FC = () => {
   const element = useRoutes(routes);
   return (
-    <div>
+    <div style={{ width: "100vw", overflow: "hidden" }}>
       <div>{element}</div>
     </div>
   );

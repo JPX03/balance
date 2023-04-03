@@ -1,0 +1,23 @@
+.root {
+  width: 100%;
+  padding-top: 5vh;
+  height: 90vh;
+
+  .headIcon {
+    width: 6vh;
+    height: 6vh;
+    margin: 0 auto;
+  }
+
+  .headTitle {
+    width: 20vw;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .card {
+    height: 60vh;
+    width: 40vw;
+    margin: 0 auto;
+    margin-top: 10vh;
+  }
+}

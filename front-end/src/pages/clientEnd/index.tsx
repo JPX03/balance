@@ -46,7 +46,7 @@ const ClientHome: React.FC = () => {
                 </Button>
               </NavLink>
             ) : (
-              <Button shape="round" size="small" onClick={() => changePage("/client/register")}>
+              <Button shape="round" size="small" onClick={() => changePage("/register")}>
                 <UserOutlined />
                 登录
               </Button>
@@ -85,7 +85,7 @@ const ClientHome: React.FC = () => {
                 我的
               </NavLink>
             ) : (
-              <Button shape="round" size="small" onClick={() => changePage("/client/register")}>
+              <Button shape="round" size="small" onClick={() => changePage("/register")}>
                 <UserOutlined />
                 登录
               </Button>
