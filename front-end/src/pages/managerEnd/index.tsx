@@ -1,21 +1,23 @@
 import React, { useState } from "react";
+import { Outlet, useNavigate } from "react-router-dom";
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   UserOutlined,
-  VideoCameraOutlined,
+  WechatOutlined,
   HomeOutlined,
   AliwangwangOutlined,
 } from "@ant-design/icons";
 import { Layout, Menu, Button } from "antd-v5";
 
-import UserList from "./users/userList";
-import UserDetails from "./users/userDetails";
-
 const { Header, Sider, Content } = Layout;
 
 const ManagerHome: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false);
+  const navigate = useNavigate();
+  const changePage = (url: string) => {
+    navigate(url);
+  };
 
   return (
     <Layout style={{ height: `100vh` }}>
@@ -30,11 +32,17 @@ const ManagerHome: React.FC = () => {
               key: "logo",
               icon: <AliwangwangOutlined />,
               label: "balance管理系统",
+              onClick: () => {
+                changePage("/manager/home");
+              },
             },
             {
               key: "home",
               icon: <HomeOutlined />,
               label: "首页",
+              onClick: () => {
+                changePage("/manager/home");
+              },
             },
             {
               key: "user",
@@ -42,35 +50,27 @@ const ManagerHome: React.FC = () => {
               label: "用户",
               children: [
                 {
-                  key: "user-List",
+                  key: "userList",
                   icon: <UserOutlined />,
                   label: "用户列表",
-                  children: [
-                    {
-                      key: "user-details",
-                      icon: <UserOutlined />,
-                      label: "用户详情",
-                    },
-                  ],
+                  onClick: () => {
+                    changePage("/manager/userList");
+                  },
                 },
               ],
             },
             {
               key: "forum",
-              icon: <VideoCameraOutlined />,
+              icon: <WechatOutlined />,
               label: "论坛",
               children: [
                 {
-                  key: "forum-List",
+                  key: "forumList",
                   icon: <UserOutlined />,
                   label: "帖子列表",
-                  children: [
-                    {
-                      key: "forum-details",
-                      icon: <UserOutlined />,
-                      label: "帖子详情",
-                    },
-                  ],
+                  onClick: () => {
+                    changePage("/manager/forumList");
+                  },
                 },
               ],
             },
@@ -95,8 +95,7 @@ const ManagerHome: React.FC = () => {
             minHeight: 280,
           }}
         >
-          <UserList></UserList>
-          <UserDetails></UserDetails>
+          <Outlet></Outlet>
         </Content>
       </Layout>
     </Layout>

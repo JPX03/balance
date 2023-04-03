@@ -1,18 +1,26 @@
 import { Navigate } from "react-router-dom";
-import ManagerHome from "../pages/managerEnd";
+
+//客户端
 import ClientHome from "../pages/clientEnd";
 import ClientIndex from "../pages/clientEnd/clientIndex";
 import Article from "../pages/clientEnd/article";
+import ArticleDetails from "../pages/clientEnd/article/details";
 import Discuss from "../pages/clientEnd/discuss";
 import Ask from "../pages/clientEnd/discuss/ask";
 import Information from "../pages/clientEnd/information";
 import Health from "../pages/clientEnd/health";
+import Register from "../pages/clientEnd/register";
+
+//管理员端
+import ManagerHome from "../pages/managerEnd";
+import ManagerIndex from "../pages/managerEnd/managerIndex";
+import UserList from "../pages/managerEnd/users/userList";
+import UserDetails from "../pages/managerEnd/users/userDetails";
+import ForumList from "../pages/managerEnd/forums/forumList";
+import ForumDetails from "../pages/managerEnd/forums/forumDetails";
+import DiscussDetails from "../pages/clientEnd/discuss/details";
 
 export default [
-  {
-    path: "/manager",
-    element: <ManagerHome></ManagerHome>,
-  },
   {
     path: "/client",
     element: <ClientHome></ClientHome>,
@@ -20,10 +28,25 @@ export default [
       { path: "", element: <ClientIndex></ClientIndex> },
       { path: "home", element: <ClientIndex></ClientIndex> },
       { path: "article", element: <Article></Article> },
+      { path: "articleDetails", element: <ArticleDetails></ArticleDetails> },
       { path: "discuss", element: <Discuss></Discuss> },
+      { path: "discussDetails", element: <DiscussDetails></DiscussDetails> },
       { path: "ask", element: <Ask></Ask> },
       { path: "health", element: <Health></Health> },
       { path: "information", element: <Information></Information> },
+      { path: "register", element: <Register></Register> },
+    ],
+  },
+  {
+    path: "/manager",
+    element: <ManagerHome></ManagerHome>,
+    children: [
+      { path: "", element: <ManagerIndex></ManagerIndex> },
+      { path: "home", element: <ManagerIndex></ManagerIndex> },
+      { path: "userList", element: <UserList></UserList> },
+      { path: "userDetails", element: <UserDetails></UserDetails> },
+      { path: "forumList", element: <ForumList></ForumList> },
+      { path: "forumDetails", element: <ForumDetails></ForumDetails> },
     ],
   },
   {

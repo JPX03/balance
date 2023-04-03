@@ -1,4 +1,5 @@
 import React, { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { Space, Table, Tag, Button, Input } from "antd-v5";
 import type { InputRef } from "antd-v5";
 import { SearchOutlined } from "@ant-design/icons";
@@ -40,6 +41,10 @@ const data: DataType[] = [
 type DataIndex = keyof DataType;
 
 const UserList: React.FC = () => {
+  const navigate = useNavigate();
+  const changPage = (url: string) => {
+    navigate(url);
+  };
   //设置当前页面
   const [curPage, setCurPage] = useState<number>(1);
 
@@ -109,7 +114,16 @@ const UserList: React.FC = () => {
       title: "用户名",
       dataIndex: "userName",
       key: "userName",
-      render: (name) => <Button type="link">{name}</Button>,
+      render: (name) => (
+        <Button
+          type="link"
+          onClick={() => {
+            changPage("/manager/userDetails");
+          }}
+        >
+          {name}
+        </Button>
+      ),
       ...getColumnSearchProps("userName"),
     },
     {

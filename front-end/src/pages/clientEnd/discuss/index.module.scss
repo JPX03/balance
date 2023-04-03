@@ -16,7 +16,6 @@
     position: absolute;
     top: 3vh;
     left: 13.5vw;
-    font-family: AlibabaPuHuiTi;
     font-size: large;
     font-weight: bold;
   }
@@ -27,10 +26,18 @@
     top: 10vh;
   }
 
+  .randomAskBlock1 :hover {
+    cursor: pointer;
+  }
+
   .randomAskBlock2 {
     position: absolute;
     left: 43.5vw;
     top: 10vh;
+  }
+
+  .randomAskBlock2 :hover {
+    cursor: pointer;
   }
 
   .askList {
@@ -43,6 +50,10 @@
       height: 15vh;
       width: 50vw;
       border-top: 1px solid rgba(203, 203, 203, 1);
+    }
+
+    .askBlock :hover {
+      cursor: pointer;
     }
 
     .blockTitle {
@@ -60,7 +71,6 @@
 
     .listTitle {
       font-size: large;
-      font-family: AlibabaPuHuiTi;
       font-weight: bold;
       height: 5vh;
     }

@@ -1,0 +1,18 @@
+.root {
+  width: 100%;
+  margin: 0 auto;
+  background-color: aliceblue;
+  padding-top: 5vh;
+  height: 200vh;
+
+  .container {
+    width: 80%;
+    margin: 0 auto;
+  }
+
+  .title {
+    font-weight: bold;
+    margin-bottom: 5vh;
+    font-size: larger;
+  }
+}

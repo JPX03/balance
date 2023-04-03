@@ -1,0 +1,32 @@
+.root {
+  width: 100%;
+
+  .head {
+    height: 35vh;
+    width: 100%;
+    background-color: rgba(177, 243, 243, 1);
+  }
+
+  .body {
+    width: 60%;
+    height: 80vh;
+  }
+
+  .img {
+    width: 4vw;
+    margin-left: 48vw;
+    margin-top: 5vh;
+  }
+
+  .name {
+    width: 20vw;
+    margin-top: 2vh;
+    margin-left: 40vw;
+    text-align: center;
+  }
+
+  .edit {
+    justify-content: center;
+    align-items: center;
+  }
+}

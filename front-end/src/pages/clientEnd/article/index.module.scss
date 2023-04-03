@@ -5,7 +5,6 @@
   .randomArticleContainer {
     height: 55vh;
     margin-top: 10vh;
-    font-family: PingFangRegular;
 
     .randomArticleTitle {
       font-size: large;
@@ -23,6 +22,10 @@
       height: 50vh;
       width: 20vw;
       border-right: 0.6px solid black;
+    }
+
+    .box1 :hover {
+      cursor: pointer;
     }
 
     .article1 {
@@ -47,6 +50,10 @@
       border-bottom: 0.6px solid #000;
     }
 
+    .box2 :hover {
+      cursor: pointer;
+    }
+
     .description2 {
       position: absolute;
       top: 10vh;
@@ -68,6 +75,10 @@
       top: 25vh;
     }
 
+    .box3 :hover {
+      cursor: pointer;
+    }
+
     .article3 {
       position: absolute;
       height: 24.9vh;
@@ -83,7 +94,6 @@
   }
 
   .articleListContainer {
-    font-family: PingFangRegular;
     height: 120vh;
     margin-top: 10vh;
 
@@ -97,6 +107,10 @@
       height: 15vh;
       width: 50vw;
       margin-top: 1vh;
+    }
+
+    .articleBlock :hover {
+      cursor: pointer;
     }
 
     .article4 {

@@ -1,10 +1,16 @@
-import React from "react";
-import { NavLink, Outlet } from "react-router-dom";
-import { Col, Row } from "antd-v5";
-
+import React, { useState } from "react";
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
+import { Col, Row, Button } from "antd-v5";
+import { UserOutlined } from "@ant-design/icons";
 import styles from "./index.module.scss";
 
 const ClientHome: React.FC = () => {
+  const [isRegister, setIsRegister] = useState<Boolean>(false);
+  const navigate = useNavigate();
+  const changePage = (url: string) => {
+    navigate(url);
+  };
+
   return (
     <div className={styles.root}>
       <div className={styles.top}>
@@ -32,9 +38,19 @@ const ClientHome: React.FC = () => {
             </NavLink>
           </Col>
           <Col span={3}>
-            <NavLink to="information" className={styles.title}>
-              我的
-            </NavLink>
+            {isRegister ? (
+              <NavLink to="information">
+                <Button shape="round" size="small">
+                  <UserOutlined />
+                  我的
+                </Button>
+              </NavLink>
+            ) : (
+              <Button shape="round" size="small" onClick={() => changePage("/client/register")}>
+                <UserOutlined />
+                登录
+              </Button>
+            )}
           </Col>
         </Row>
       </div>
@@ -64,9 +80,16 @@ const ClientHome: React.FC = () => {
             </NavLink>
           </Col>
           <Col span={3}>
-            <NavLink to="information" className={styles.title}>
-              我的
-            </NavLink>
+            {isRegister ? (
+              <NavLink to="information" className={styles.title}>
+                我的
+              </NavLink>
+            ) : (
+              <Button shape="round" size="small" onClick={() => changePage("/client/register")}>
+                <UserOutlined />
+                登录
+              </Button>
+            )}
           </Col>
         </Row>
       </div>
