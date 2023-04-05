@@ -8,7 +8,7 @@ import type { FilterConfirmProps } from "antd-v5/es/table/interface";
 
 interface DataType {
   key: string;
-  userName: string;
+  username: string;
   account: string;
   gender: string;
   createTime: string;
@@ -17,21 +17,21 @@ interface DataType {
 const data: DataType[] = [
   {
     key: "1",
-    userName: "John Brown",
+    username: "John Brown",
     gender: "famale",
     account: "107450",
     createTime: "2022-12-05",
   },
   {
     key: "2",
-    userName: "Jim Green",
+    username: "Jim Green",
     gender: "male",
     account: "107451",
     createTime: "2022-12-05",
   },
   {
     key: "3",
-    userName: "Joe Black",
+    username: "Joe Black",
     gender: "male",
     account: "107452",
     createTime: "2022-12-05",
@@ -112,8 +112,8 @@ const UserList: React.FC = () => {
   const columns: ColumnsType<DataType> = [
     {
       title: "用户名",
-      dataIndex: "userName",
-      key: "userName",
+      dataIndex: "username",
+      key: "username",
       render: (name) => (
         <Button
           type="link"
@@ -124,7 +124,7 @@ const UserList: React.FC = () => {
           {name}
         </Button>
       ),
-      ...getColumnSearchProps("userName"),
+      ...getColumnSearchProps("username"),
     },
     {
       title: "性别",

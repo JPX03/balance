@@ -10,7 +10,7 @@ interface DataType {
   key: string;
   forumTitle: string;
   account: string;
-  userName: string;
+  username: string;
   createTime: string;
 }
 
@@ -18,21 +18,21 @@ const data: DataType[] = [
   {
     key: "1",
     forumTitle: "John Brown",
-    userName: "famale",
+    username: "famale",
     account: "107450",
     createTime: "2022-12-05",
   },
   {
     key: "2",
     forumTitle: "Jim Green",
-    userName: "male",
+    username: "male",
     account: "107451",
     createTime: "2022-12-05",
   },
   {
     key: "3",
     forumTitle: "Joe Black",
-    userName: "male",
+    username: "male",
     account: "107452",
     createTime: "2022-12-05",
   },
@@ -128,8 +128,8 @@ const ForumList: React.FC = () => {
     },
     {
       title: "发帖人",
-      key: "userName",
-      dataIndex: "userName",
+      key: "username",
+      dataIndex: "username",
       render: () => {
         return <Tag color="blue">我</Tag>;
       },

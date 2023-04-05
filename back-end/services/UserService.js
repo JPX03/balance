@@ -9,7 +9,13 @@ const UserService = {
       account,
       password,
       createTime,
-    });
+    })
+      .then(() => {
+        return "success";
+      })
+      .catch((err) => {
+        return err;
+      });
   },
 };
 
