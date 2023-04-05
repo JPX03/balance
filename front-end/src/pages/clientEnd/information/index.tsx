@@ -3,8 +3,8 @@ import { Col, Row, Button } from "antd-v5";
 import styles from "./index.module.scss";
 
 const Information: React.FC = () => {
-  const [sex, setSex] = useState<String>("male");
-  const [name, SetName] = useState<String>("哈哈哈");
+  const [sex, setSex] = useState<string>("male");
+  const [name, SetName] = useState<string>("哈哈哈");
 
   return (
     <div className={styles.root}>

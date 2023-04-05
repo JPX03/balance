@@ -29,6 +29,16 @@ const RegisterCard: React.FC = () => {
   };
   const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
   const sendMessage = () => {
+    if (type === "signUp") {
+      fetch("http://locolhost:4000/users/signUp", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }).then((res) => {
+        console.log(res);
+      });
+    }
     console.log(type, account, userName, password);
   };
   return (
