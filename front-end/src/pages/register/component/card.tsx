@@ -13,6 +13,7 @@ const RegisterCard: React.FC = () => {
   const [age, setAge] = useState<any>();
   const [password, setPassword] = useState<string>("");
   const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
+  const storage = window.localStorage;
 
   //跳转页面
   const changePage = (url: string) => {
@@ -51,7 +52,7 @@ const RegisterCard: React.FC = () => {
   //登录或注册请求
   const sendMessage = () => {
     if (type === "signUp") {
-      if (account == "" || username == "" || password == "") {
+      if (account === "" || username === "" || password === "") {
         alert("请将信息填写完整！");
       } else {
         const time = dayjs().format("YYYY-MM-DD");
@@ -74,16 +75,72 @@ const RegisterCard: React.FC = () => {
           })
           .then((res) => {
             if (res.success) {
-              alert("创建成功！");
+              res.data.type = "user";
+              storage.setItem("message", JSON.stringify(res.data));
+              alert("注册成功！");
               changePage("/client/home");
             } else {
-              alert("用户名重复！");
+              alert("注册失败，原因可能是账号重复！");
             }
           })
-          .catch((err) => {
+          .catch(() => {
             alert("网络错误！");
           });
       }
+    } else if (type === "manager") {
+      fetch("http://localhost:4000/api/managers/signIn", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          account: account,
+          password: password,
+        }),
+      })
+        .then((res) => {
+          return res.json();
+        })
+        .then((res) => {
+          if (res.success) {
+            res.data.type = "manager";
+            storage.setItem("message", JSON.stringify(res.data));
+            alert("登录成功！");
+            changePage("/manager/home");
+          } else {
+            alert("登录失败");
+          }
+        })
+        .catch(() => {
+          alert("网络错误！");
+        });
+    } else {
+      fetch("http://localhost:4000/api/users/signIn", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          account: account,
+          password: password,
+        }),
+      })
+        .then((res) => {
+          return res.json();
+        })
+        .then((res) => {
+          if (res.success) {
+            res.data.type = "user";
+            storage.setItem("message", JSON.stringify(res.data));
+            alert("登录成功！");
+            changePage("/client/home");
+          } else {
+            alert("登录失败");
+          }
+        })
+        .catch(() => {
+          alert("网络错误！");
+        });
     }
   };
 

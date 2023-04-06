@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Space, Table, Tag, Button, Input } from "antd-v5";
 import type { InputRef } from "antd-v5";
@@ -14,39 +14,15 @@ interface DataType {
   createTime: string;
 }
 
-const data: DataType[] = [
-  {
-    key: "1",
-    username: "John Brown",
-    gender: "famale",
-    account: "107450",
-    createTime: "2022-12-05",
-  },
-  {
-    key: "2",
-    username: "Jim Green",
-    gender: "male",
-    account: "107451",
-    createTime: "2022-12-05",
-  },
-  {
-    key: "3",
-    username: "Joe Black",
-    gender: "male",
-    account: "107452",
-    createTime: "2022-12-05",
-  },
-];
-
 type DataIndex = keyof DataType;
 
 const UserList: React.FC = () => {
   const navigate = useNavigate();
-  const changPage = (url: string) => {
-    navigate(url);
-  };
+
   //设置当前页面
   const [curPage, setCurPage] = useState<number>(1);
+  const [total, setTotal] = useState<number>(1);
+  const [list, setList] = useState<DataType[]>([]);
 
   //设置搜索功能
   const [searchText, setSearchText] = useState("");
@@ -62,12 +38,10 @@ const UserList: React.FC = () => {
     setSearchText(selectedKeys[0]);
     setSearchedColumn(dataIndex);
   };
-
   const handleReset = (clearFilters: () => void) => {
     clearFilters();
     setSearchText("");
   };
-
   const getColumnSearchProps = (dataIndex: DataIndex): ColumnType<DataType> => ({
     filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
       <div style={{ padding: 8 }} onKeyDown={(e) => e.stopPropagation()}>
@@ -108,20 +82,85 @@ const UserList: React.FC = () => {
     },
   });
 
+  const changPage = (url: string, id: string) => {
+    navigate(url, { state: { id } });
+  };
+
+  //分页功能
+  const handlePageChange = (page: number) => {
+    setCurPage(page);
+  };
+
+  const getList = (curPage: number, number: number) => {
+    fetch("http://localhost:4000/api/users/getList", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        curPage: curPage,
+        number: number,
+      }),
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((res) => {
+        setTotal(res.total);
+        res.data?.forEach((item: any) => {
+          item.key = item._id;
+        });
+        setList(res.data);
+      })
+      .catch(() => {
+        alert("网络错误！");
+      });
+  };
+
+  const deleteUser = (_: any, record: any) => {
+    fetch("http://localhost:4000/api/users/deleteUser", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id: record._id,
+      }),
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((res) => {
+        if (res.success) {
+          alert("删除成功！");
+          getList(curPage, 8);
+        } else {
+          alert("删除失败！");
+        }
+      })
+      .catch(() => {
+        alert("网络错误！");
+      });
+  };
+
+  useEffect(() => {
+    getList(curPage, 8);
+  }, [curPage]);
+
   //配置table
   const columns: ColumnsType<DataType> = [
     {
       title: "用户名",
       dataIndex: "username",
       key: "username",
-      render: (name) => (
+      render: (_, record) => (
         <Button
           type="link"
           onClick={() => {
-            changPage("/manager/userDetails");
+            changPage(`/manager/userDetails/${record.key}`, record.key);
           }}
         >
-          {name}
+          {record.username}
         </Button>
       ),
       ...getColumnSearchProps("username"),
@@ -131,7 +170,7 @@ const UserList: React.FC = () => {
       key: "gender",
       dataIndex: "gender",
       render: (gender) => {
-        return gender == "famale" ? <Tag color="pink">女</Tag> : <Tag color="blue">男</Tag>;
+        return gender === "famale" ? <Tag color="pink">女</Tag> : <Tag color="blue">男</Tag>;
       },
     },
     {
@@ -150,8 +189,10 @@ const UserList: React.FC = () => {
       key: "action",
       render: (_, record) => (
         <Space size="middle">
-          <Button type="link">详情</Button>
-          <Button type="link" danger>
+          <Button type="link" onClick={() => changPage(`/manager/userDetails/${record.key}`, record.key)}>
+            详情
+          </Button>
+          <Button type="link" danger onClick={() => deleteUser(_, record)}>
             删除
           </Button>
         </Space>
@@ -159,21 +200,16 @@ const UserList: React.FC = () => {
     },
   ];
 
-  //分页功能
-  const handlePageChange = (page: number) => {
-    setCurPage(page);
-  };
-
   const paginationProps = {
     current: curPage, //当前页码
-    pageSize: 10,
-    total: 3,
+    pageSize: 8,
+    total: total,
     onChange: (page: number) => handlePageChange(page), //改变页码的函数
     hideOnSinglePage: false,
     showSizeChanger: false,
   };
 
-  return <Table columns={columns} dataSource={data} pagination={paginationProps} />;
+  return <Table columns={columns} dataSource={list} pagination={paginationProps} />;
 };
 
 export default UserList;

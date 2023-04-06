@@ -15,6 +15,7 @@ const { Header, Sider, Content } = Layout;
 const ManagerHome: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false);
   const navigate = useNavigate();
+  const storage = window.localStorage;
   const changePage = (url: string) => {
     navigate(url);
   };
@@ -83,7 +84,15 @@ const ManagerHome: React.FC = () => {
             className: "trigger",
             onClick: () => setCollapsed(!collapsed),
           })}
-          <Button type="primary" size="small" style={{ position: "absolute", right: 40, top: 20 }}>
+          <Button
+            type="primary"
+            size="small"
+            style={{ position: "absolute", right: 40, top: 20 }}
+            onClick={() => {
+              storage.removeItem("message");
+              changePage("/client/home");
+            }}
+          >
             退出
           </Button>
         </Header>

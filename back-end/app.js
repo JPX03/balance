@@ -4,7 +4,7 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 
-var managerRouter = require("./routes/manager");
+var managersRouter = require("./routes/managers");
 var usersRouter = require("./routes/users");
 
 var app = express();
@@ -29,7 +29,7 @@ app.all("*", function (req, res) {
   req.next();
 });
 
-app.use("/api/namager", managerRouter);
+app.use("/api/managers", managersRouter);
 app.use("/api/users", usersRouter);
 
 // catch 404 and forward to error handler

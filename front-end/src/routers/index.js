@@ -45,7 +45,7 @@ export default [
       { path: "", element: <ManagerIndex></ManagerIndex> },
       { path: "home", element: <ManagerIndex></ManagerIndex> },
       { path: "userList", element: <UserList></UserList> },
-      { path: "userDetails", element: <UserDetails></UserDetails> },
+      { path: "userDetails/:id", element: <UserDetails></UserDetails> },
       { path: "forumList", element: <ForumList></ForumList> },
       { path: "forumDetails", element: <ForumDetails></ForumDetails> },
     ],

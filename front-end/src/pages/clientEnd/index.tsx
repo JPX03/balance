@@ -11,6 +11,13 @@ const ClientHome: React.FC = () => {
     navigate(url);
   };
 
+  //管理员重定向
+  const storage: any = window.localStorage;
+  if (storage.getItem("message") && JSON.parse(storage.getItem("message")).type === "manager") {
+    alert("您当前使用管理员信息登录！");
+    navigate("/manager/home", { replace: true });
+  }
+
   return (
     <div className={styles.root}>
       <div className={styles.top}>
@@ -38,7 +45,7 @@ const ClientHome: React.FC = () => {
             </NavLink>
           </Col>
           <Col span={3}>
-            {isRegister ? (
+            {storage.getItem("message") ? (
               <NavLink to="information">
                 <Button shape="round" size="small">
                   <UserOutlined />
