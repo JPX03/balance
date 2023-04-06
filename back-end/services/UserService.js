@@ -69,7 +69,7 @@ const UserService = {
     });
   },
   getList: (curPage, number) => {
-    return UserModel.find({}).then((res) => {
+    return UserModel.find({}, ["_id", "username", "gender", "createTime", "account"]).then((res) => {
       return { total: res.length, data: res.splice((curPage - 1) * number, number) };
     });
   },

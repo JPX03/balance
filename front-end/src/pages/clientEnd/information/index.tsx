@@ -1,16 +1,57 @@
-import React, { useState } from "react";
-import { Col, Row, Button, Modal, Input } from "antd-v5";
+import React, { useState, useEffect } from "react";
+import { Col, Row, Button, Modal, Input, Pagination } from "antd-v5";
 import { useNavigate } from "react-router-dom";
 import styles from "./index.module.scss";
 
 const Information: React.FC = () => {
+  const navigate = useNavigate();
   const storage: any = window.localStorage;
   const message = JSON.parse(storage.getItem("message"));
-  const navigate = useNavigate();
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [curPage, setCurPage] = useState<number>(1);
+  const [total, setTotal] = useState<number>(1);
+  const [list, setList] = useState<any>([]);
+
+  //分页功能
+  const onPageChange = (page: number) => {
+    setCurPage(page);
+  };
+  const getList = (curPage: number, number: number) => {
+    fetch("http://localhost:4000/api/asks/getList", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userId: message.id,
+        curPage: curPage,
+        number: number,
+      }),
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((res) => {
+        if (res.success) {
+          setTotal(res.total);
+          res.data?.forEach((item: any) => {
+            item.key = item._id;
+          });
+          setList(res.data);
+        } else {
+          setList([]);
+        }
+      })
+      .catch(() => {
+        alert("网络错误！");
+      });
+  };
+  const changePage = (url: string) => {
+    navigate(url);
+  };
   //用户名信息
   const changeUsername = (username: string) => {
     setUsername(username);
@@ -66,6 +107,9 @@ const Information: React.FC = () => {
     storage.removeItem("message");
     navigate("/client/home");
   };
+  useEffect(() => {
+    getList(curPage, 6);
+  }, []);
 
   return (
     <div className={styles.root}>
@@ -97,6 +141,29 @@ const Information: React.FC = () => {
           </Col>
           <Col span={9}></Col>
         </Row>
+      </div>
+      <div className={styles.askList}>
+        <div className={styles.listTitle}>我的讨论</div>
+        {list.length === 0 ? (
+          <div>暂未发布</div>
+        ) : (
+          list?.map((item: any) => {
+            return (
+              <div className={styles.askBlock} onClick={() => changePage("/client/discussDetails")}>
+                <div className={styles.blockTitle}>{item.title}</div>
+                <div className={styles.blockContent}>{item.content}</div>
+              </div>
+            );
+          })
+        )}
+        <Pagination
+          defaultCurrent={1}
+          total={total}
+          className={styles.pagination}
+          onChange={(page) => {
+            onPageChange(page);
+          }}
+        />
       </div>
       <Modal title="修改信息" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
         <div style={{ marginBottom: "1vh" }}>新用户名：</div>

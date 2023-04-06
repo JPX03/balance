@@ -1,28 +1,65 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./index.module.scss";
 import { useNavigate } from "react-router-dom";
 import { Pagination, Button } from "antd-v5";
 
 const Discuss: React.FC = () => {
   const navigate = useNavigate();
+  const [curPage, setCurPage] = useState<number>(1);
+  const [total, setTotal] = useState<number>(1);
+  const [list, setList] = useState<any>([]);
+
+  //分页功能
+  const onPageChange = (page: number) => {
+    setCurPage(page);
+  };
+  const getList = (curPage: number, number: number) => {
+    fetch("http://localhost:4000/api/asks/getList", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        curPage: curPage,
+        number: number,
+      }),
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((res) => {
+        setTotal(res.total);
+        res.data?.forEach((item: any) => {
+          item.key = item._id;
+        });
+        setList(res.data);
+      })
+      .catch(() => {
+        alert("网络错误！");
+      });
+  };
   const changePage = (url: string) => {
     navigate(url);
   };
-  const list = [
-    { title: "标题", content: "内容" },
-    { title: "标题", content: "内容" },
-    { title: "标题", content: "内容" },
-    { title: "标题", content: "内容" },
-    { title: "标题", content: "内容" },
-    { title: "标题", content: "内容" },
-  ];
+
+  const storage = window.localStorage;
+  useEffect(() => {
+    getList(curPage, 6);
+  }, []);
+
   return (
     <div className={styles.root}>
       <img src="/imgs/ask.gif" className={styles.img1} alt="未加载"></img>
       <Button
         style={{ position: "absolute", left: "13.5vw", top: "30vh" }}
         shape="round"
-        onClick={() => changePage("/client/ask")}
+        onClick={() => {
+          if (!storage.getItem("message")) {
+            alert("请先登录！");
+          } else {
+            changePage("/client/ask");
+          }
+        }}
       >
         提问
       </Button>
@@ -37,7 +74,7 @@ const Discuss: React.FC = () => {
       </div>
       <div className={styles.askList}>
         <div className={styles.listTitle}>最新问答</div>
-        {list.map((item) => {
+        {list?.map((item: any) => {
           return (
             <div className={styles.askBlock} onClick={() => changePage("/client/discussDetails")}>
               <div className={styles.blockTitle}>{item.title}</div>
@@ -45,7 +82,14 @@ const Discuss: React.FC = () => {
             </div>
           );
         })}
-        <Pagination defaultCurrent={1} total={50} className={styles.pagination} />
+        <Pagination
+          defaultCurrent={1}
+          total={total}
+          className={styles.pagination}
+          onChange={(page) => {
+            onPageChange(page);
+          }}
+        />
       </div>
     </div>
   );
