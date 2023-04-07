@@ -43,6 +43,20 @@ const AskController = {
       }
     }
   },
+  getDetails: async (req, res) => {
+    const { askId } = req.body;
+    const result = await AskService.getDetails(askId);
+    if (result.length !== 0) {
+      res.send({
+        success: true,
+        data: result[0],
+      });
+    } else {
+      res.send({
+        success: false,
+      });
+    }
+  },
 };
 
 module.exports = AskController;

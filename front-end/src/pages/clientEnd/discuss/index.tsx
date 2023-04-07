@@ -8,6 +8,7 @@ const Discuss: React.FC = () => {
   const [curPage, setCurPage] = useState<number>(1);
   const [total, setTotal] = useState<number>(1);
   const [list, setList] = useState<any>([]);
+  const [twoAsk, setTwoAsk] = useState<any>([]);
 
   //分页功能
   const onPageChange = (page: number) => {
@@ -38,12 +39,39 @@ const Discuss: React.FC = () => {
         alert("网络错误！");
       });
   };
-  const changePage = (url: string) => {
-    navigate(url);
+  const changePage = (url: string, id: string) => {
+    navigate(url, { state: { id } });
+  };
+
+  const getTwoAsk = (curPage: number, number: number) => {
+    fetch("http://localhost:4000/api/asks/getList", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        curPage: curPage,
+        number: number,
+      }),
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((res) => {
+        if (res.success) {
+          setTwoAsk(res.data);
+        } else {
+          setTwoAsk([]);
+        }
+      })
+      .catch(() => {
+        alert("网络错误！");
+      });
   };
 
   const storage = window.localStorage;
   useEffect(() => {
+    getTwoAsk(1, 2);
     getList(curPage, 6);
   }, []);
 
@@ -57,7 +85,7 @@ const Discuss: React.FC = () => {
           if (!storage.getItem("message")) {
             alert("请先登录！");
           } else {
-            changePage("/client/ask");
+            navigate("/client/ask");
           }
         }}
       >
@@ -65,18 +93,24 @@ const Discuss: React.FC = () => {
       </Button>
       <div className={styles.randomAskContainer}>
         <div className={styles.randomAskTitle}>精选问答</div>
-        <div className={styles.randomAskBlock1} onClick={() => changePage("/client/discussDetails")}>
-          1哈哈哈
+        <div
+          className={styles.randomAskBlock1}
+          onClick={() => changePage(`/client/discussDetails/${twoAsk[0]?._id}`, twoAsk[0]?._id)}
+        >
+          {twoAsk[0]?.title}
         </div>
-        <div className={styles.randomAskBlock2} onClick={() => changePage("/client/discussDetails")}>
-          456
+        <div
+          className={styles.randomAskBlock2}
+          onClick={() => changePage(`/client/discussDetails/${twoAsk[1]._id}`, twoAsk[1]._id)}
+        >
+          {twoAsk[1]?.title}
         </div>
       </div>
       <div className={styles.askList}>
         <div className={styles.listTitle}>最新问答</div>
         {list?.map((item: any) => {
           return (
-            <div className={styles.askBlock} onClick={() => changePage("/client/discussDetails")}>
+            <div className={styles.askBlock} onClick={() => changePage(`/client/discussDetails/${item._id}`, item._id)}>
               <div className={styles.blockTitle}>{item.title}</div>
               <div className={styles.blockContent}>{item.content}</div>
             </div>

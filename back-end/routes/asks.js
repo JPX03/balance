@@ -6,4 +6,5 @@ const AskController = require("../controllers/AskController");
 
 router.post("/addAsk", AskController.addAsk);
 router.post("/getList", AskController.getList);
+router.post("/getDetails", AskController.getDetails);
 module.exports = router;

@@ -49,8 +49,8 @@ const Information: React.FC = () => {
         alert("网络错误！");
       });
   };
-  const changePage = (url: string) => {
-    navigate(url);
+  const changePage = (url: string, id: string) => {
+    navigate(url, { state: { id } });
   };
   //用户名信息
   const changeUsername = (username: string) => {
@@ -149,7 +149,10 @@ const Information: React.FC = () => {
         ) : (
           list?.map((item: any) => {
             return (
-              <div className={styles.askBlock} onClick={() => changePage("/client/discussDetails")}>
+              <div
+                className={styles.askBlock}
+                onClick={() => changePage(`/client/discussDetails/${item._id}`, item._id)}
+              >
                 <div className={styles.blockTitle}>{item.title}</div>
                 <div className={styles.blockContent}>{item.content}</div>
               </div>

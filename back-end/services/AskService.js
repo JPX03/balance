@@ -31,6 +31,9 @@ const AskService = {
       });
     }
   },
+  getDetails: (askId) => {
+    return AskModel.find({ _id: askId });
+  },
 };
 
 module.exports = AskService;
