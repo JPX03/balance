@@ -48,7 +48,7 @@ export default [
       { path: "userList", element: <UserList></UserList> },
       { path: "userDetails/:id", element: <UserDetails></UserDetails> },
       { path: "forumList", element: <ForumList></ForumList> },
-      { path: "forumDetails", element: <ForumDetails></ForumDetails> },
+      { path: "forumDetails/:id", element: <ForumDetails></ForumDetails> },
     ],
   },
   { path: "/register", element: <Register></Register> },

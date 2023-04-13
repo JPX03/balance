@@ -58,7 +58,7 @@ const Ask: React.FC = () => {
             alert("发布成功！");
             changePage("/client/discuss");
           } else {
-            alert("注册失败！");
+            alert("发布失败！");
           }
         })
         .catch(() => {

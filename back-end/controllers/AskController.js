@@ -1,4 +1,5 @@
 const AskService = require("../services/AskService");
+const AnswerService = require("../services/AnswerService");
 
 const AskController = {
   addAsk: async (req, res) => {
@@ -12,6 +13,24 @@ const AskController = {
       res.send({ success: false });
     }
   },
+
+  deleteAsk: async (req, res) => {
+    const { id } = req.body;
+    const result1 = await AnswerService.deleteByAskId(id);
+    if (result1 === "success") {
+      const result2 = await AskService.deleteAsk(id);
+      if (result2 == "success") {
+        res.send({
+          success: true,
+        });
+      } else {
+        res.send({ success: false });
+      }
+    } else {
+      res.send({ success: false });
+    }
+  },
+
   getList: async (req, res) => {
     const { curPage, number } = req.body;
     if (req.body?.userId) {
@@ -43,6 +62,7 @@ const AskController = {
       }
     }
   },
+
   getDetails: async (req, res) => {
     const { askId } = req.body;
     const result = await AskService.getDetails(askId);

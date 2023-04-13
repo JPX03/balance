@@ -21,7 +21,7 @@ const ManagerHome: React.FC = () => {
   };
 
   return (
-    <Layout style={{ height: `100vh` }}>
+    <Layout style={{ minHeight: `100vh`, overflow: "hidden", marginBottom: "5vh" }}>
       <Sider trigger={null} collapsible collapsed={collapsed} theme="dark">
         <Menu
           style={{ color: "white" }}

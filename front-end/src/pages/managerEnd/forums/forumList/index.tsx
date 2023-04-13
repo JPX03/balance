@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Space, Table, Tag, Button, Input } from "antd-v5";
 import type { InputRef } from "antd-v5";
@@ -8,50 +8,81 @@ import type { FilterConfirmProps } from "antd-v5/es/table/interface";
 
 interface DataType {
   key: string;
-  forumTitle: string;
+  title: string;
+  userId: string;
   account: string;
   username: string;
   createTime: string;
 }
 
-const data: DataType[] = [
-  {
-    key: "1",
-    forumTitle: "John Brown",
-    username: "famale",
-    account: "107450",
-    createTime: "2022-12-05",
-  },
-  {
-    key: "2",
-    forumTitle: "Jim Green",
-    username: "male",
-    account: "107451",
-    createTime: "2022-12-05",
-  },
-  {
-    key: "3",
-    forumTitle: "Joe Black",
-    username: "male",
-    account: "107452",
-    createTime: "2022-12-05",
-  },
-];
-
 type DataIndex = keyof DataType;
 
 const ForumList: React.FC = () => {
   const navigate = useNavigate();
-  const changPage = (url: string) => {
-    navigate(url);
+  const changPage = (url: string, id: string) => {
+    navigate(url, { state: { id } });
   };
   //设置当前页面
   const [curPage, setCurPage] = useState<number>(1);
+  const [total, setTotal] = useState<number>(1);
+  const [list, setList] = useState<DataType[]>([]);
 
   //设置搜索功能
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef<InputRef>(null);
+
+  const getList = (curPage: number, number: number) => {
+    fetch("http://localhost:4000/api/asks/getList", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        curPage: curPage,
+        number: number,
+      }),
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((res) => {
+        setTotal(res.total);
+        res.data?.forEach((item: any) => {
+          item.key = item._id;
+        });
+        setList(res.data);
+      })
+      .catch(() => {
+        alert("网络错误！");
+      });
+  };
+
+  const deleteAsk = (_: any, record: any) => {
+    fetch("http://localhost:4000/api/asks/deleteAsk", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id: record._id,
+      }),
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((res) => {
+        if (res.success) {
+          alert("删除成功！");
+          getList(curPage, 8);
+        } else {
+          alert("删除失败！");
+        }
+      })
+      .catch(() => {
+        alert("网络错误！");
+      });
+  };
 
   const handleSearch = (
     selectedKeys: string[],
@@ -108,31 +139,41 @@ const ForumList: React.FC = () => {
     },
   });
 
+  useEffect(() => {
+    getList(curPage, 8);
+  }, [curPage]);
   //配置table
   const columns: ColumnsType<DataType> = [
     {
       title: "帖子名",
-      dataIndex: "forumTitle",
-      key: "forumTitle",
-      render: (name) => (
+      dataIndex: "title",
+      key: "title",
+      render: (_, record) => (
         <Button
           type="link"
           onClick={() => {
-            changPage("/manager/forumDetails");
+            changPage(`/manager/forumDetails/${record.key}`, record.key);
           }}
         >
-          {name}
+          {record.title}
         </Button>
       ),
-      ...getColumnSearchProps("forumTitle"),
+      ...getColumnSearchProps("title"),
     },
     {
       title: "发帖人",
       key: "username",
       dataIndex: "username",
-      render: () => {
-        return <Tag color="blue">我</Tag>;
-      },
+      render: (_, record) => (
+        <Button
+          type="link"
+          onClick={() => {
+            changPage(`/manager/userDetails/${record.userId}`, record.userId);
+          }}
+        >
+          {record.username}
+        </Button>
+      ),
     },
     {
       title: "创建时间",
@@ -147,12 +188,12 @@ const ForumList: React.FC = () => {
           <Button
             type="link"
             onClick={() => {
-              changPage("/manager/forumDetails");
+              changPage(`/manager/forumDetails/${record.key}`, record.key);
             }}
           >
             详情
           </Button>
-          <Button type="link" danger>
+          <Button type="link" danger onClick={() => deleteAsk(_, record)}>
             删除
           </Button>
         </Space>
@@ -174,7 +215,7 @@ const ForumList: React.FC = () => {
     showSizeChanger: false,
   };
 
-  return <Table columns={columns} dataSource={data} pagination={paginationProps} />;
+  return <Table columns={columns} dataSource={list} pagination={paginationProps} />;
 };
 
 export default ForumList;
