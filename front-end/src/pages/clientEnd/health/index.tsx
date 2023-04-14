@@ -1,5 +1,5 @@
 import React from "react";
-import { Col, Row } from "antd-v5";
+import { Col, Row, Card } from "antd-v5";
 import Weight from "./component/weight";
 import BloodFat from "./component/bloodFat";
 import BloodPressure from "./component/bloodPressure";

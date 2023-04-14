@@ -1,7 +1,7 @@
 const UserModel = require("../model/UserModel");
 
 const UserService = {
-  addUser: (username, gender, age, account, password, createTime) => {
+  addUser: (username, gender, age, account, password, createTime, height) => {
     return UserModel.create({
       username,
       gender,
@@ -9,13 +9,15 @@ const UserService = {
       account,
       password,
       createTime,
+      height,
     })
       .then((res) => {
-        const { _id, username, gender } = res;
+        const { _id, username, gender, height } = res;
         const data = {
           id: _id,
           username: username,
           gender: gender,
+          height: height,
         };
         return {
           success: true,
@@ -43,7 +45,7 @@ const UserService = {
         password: password,
       }
     ).then((res) => {
-      if (res.modifiedCount == 1) {
+      if (res.acknowledged) {
         return "success";
       } else {
         return "failed";
@@ -51,22 +53,25 @@ const UserService = {
     });
   },
   signIn: (account, password) => {
-    return UserModel.find({ account: account, password: password }, ["_id", "username", "gender"]).then((res) => {
-      if (res.length === 1) {
-        const { _id, username, gender } = res[0];
-        const data = {
-          id: _id,
-          username: username,
-          gender: gender,
-        };
-        return {
-          success: true,
-          data: data,
-        };
-      } else {
-        return "failed";
+    return UserModel.find({ account: account, password: password }, ["_id", "username", "gender", "height"]).then(
+      (res) => {
+        if (res.length === 1) {
+          const { _id, username, gender } = res[0];
+          const data = {
+            id: _id,
+            username: username,
+            gender: gender,
+            height: height,
+          };
+          return {
+            success: true,
+            data: data,
+          };
+        } else {
+          return "failed";
+        }
       }
-    });
+    );
   },
   getList: (curPage, number) => {
     return UserModel.find({}, ["_id", "username", "gender", "createTime", "account"]).then((res) => {

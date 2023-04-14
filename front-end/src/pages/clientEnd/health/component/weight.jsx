@@ -3,18 +3,65 @@ import ReactDOM from "react-dom";
 import { Card, Button, Modal, DatePicker, InputNumber, Col, Row } from "antd-v5";
 import dayjs from "dayjs";
 import { Line } from "@ant-design/plots";
+import BMI from "./bmi";
 
 const Weight = () => {
   const [data, setData] = useState([]);
+  const [time, setTime] = useState("");
+  const [weight, setWeight] = useState(0);
   const [isModalOpen1, setIsModalOpen1] = useState(false);
   const [isModalOpen2, setIsModalOpen2] = useState(false);
+  const storage = window.localStorage;
+  const message = JSON.parse(storage.getItem("message"));
+
   const showModal1 = () => {
     setIsModalOpen1(true);
   };
   const handleOk1 = () => {
-    setIsModalOpen1(false);
+    if (time == "" || time == null) {
+      alert("请输入选择时间");
+    } else {
+      const list = data;
+      let shouldAdd = true;
+      list?.forEach((item) => {
+        if (item.Date == time) {
+          shouldAdd = false;
+          item.scales = weight;
+        }
+      });
+      if (shouldAdd) {
+        list?.push({
+          Date: time,
+          scales: weight,
+        });
+      }
+      fetch("http://localhost:4000/api/records/updateWeight", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId: message.id,
+          weight: JSON.stringify(list),
+        }),
+      })
+        .then((res) => {
+          return res.json();
+        })
+        .then((res) => {
+          if (res.success) {
+            alert("修改成功！");
+            setWeight(0);
+            setIsModalOpen1(false);
+          }
+        })
+        .catch(() => {
+          alert("网络错误！");
+        });
+    }
   };
   const handleCancel1 = () => {
+    setWeight(0);
     setIsModalOpen1(false);
   };
   const showModal2 = () => {
@@ -27,37 +74,65 @@ const Weight = () => {
     setIsModalOpen2(false);
   };
   const onDateChange = (date) => {
-    if (date) {
-      console.log("Date: ", date);
-    } else {
-      console.log("Clear");
-    }
+    setTime(date?.format("YYYY-MM-DD"));
   };
   const onNumberChange = (value) => {
-    console.log("changed", value);
+    setWeight(value);
+  };
+
+  const getList = (userId, listName) => {
+    fetch("http://localhost:4000/api/records/getList", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userId: userId,
+        listName: listName,
+      }),
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((res) => {
+        setData(JSON.parse(res?.data));
+      })
+      .catch(() => {
+        alert("网络错误！");
+      });
+  };
+
+  const getMaxMin = (arr) => {
+    let max = arr[0]?.scales;
+    let min = arr[0]?.scales;
+    for (let i = 0; i < arr.length; i++) {
+      if (arr[i]?.scales >= max) {
+        max = arr[i]?.scales;
+      } else {
+        min = arr[i]?.scales;
+      }
+    }
+    return { max: max, min: min };
   };
 
   useEffect(() => {
-    asyncFetch();
+    getList(message.id, "weight");
   }, []);
-
-  const asyncFetch = () => {
-    fetch("https://gw.alipayobjects.com/os/bmw-prod/1d565782-dde4-4bb6-8946-ea6a38ccf184.json")
-      .then((response) => response.json())
-      .then((json) => setData(json))
-      .catch((error) => {
-        console.log("fetch data failed", error);
-      });
-  };
 
   const config = {
     data,
     padding: "auto",
     xField: "Date",
     yField: "scales",
+    yAxis: {
+      max: Math.floor(getMaxMin(data).max) + 1,
+      min: Math.floor(getMaxMin(data).min),
+      tickInterval: 3,
+      tickCount: 1,
+    },
     xAxis: {
-      // type: 'timeCat',
-      tickCount: 5,
+      type: "timeCat",
+      tickCount: 10,
     },
   };
 
@@ -77,13 +152,14 @@ const Weight = () => {
       }
       style={{ width: "95%", height: "45vh" }}
     >
-      <div style={{ height: "30vh", width: "100%" }}>
-        <Row style={{ height: "100%", width: "100%" }}>
+      <div style={{ height: "50vh", width: "100%" }}>
+        <p style={{ marginBottom: "3vh" }}>身高：175</p>
+        <Row style={{ height: "55%", width: "100%" }}>
           <Col span={12} style={{ height: "100%", width: "100%" }}>
             <Line {...config} style={{ height: "100%", width: "96%" }} />
           </Col>
           <Col span={12} style={{ height: "100%", width: "100%" }}>
-            <Line {...config} style={{ height: "100%", width: "96%" }} />
+            <BMI></BMI>
           </Col>
         </Row>
       </div>
@@ -100,7 +176,7 @@ const Weight = () => {
         <br />
         <br />
         <span>体重：</span>
-        <InputNumber min={0} max={200} onChange={onNumberChange} placeholder="单位kg" />
+        <InputNumber min={0} max={150} defaultValue={0} value={weight} onChange={onNumberChange} placeholder="单位kg" />
       </Modal>
       <Modal title="建议" open={isModalOpen2} onOk={handleOk2} onCancel={handleCancel2}>
         <p>

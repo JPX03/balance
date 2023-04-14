@@ -11,6 +11,7 @@ const RegisterCard: React.FC = () => {
   const [username, setUsername] = useState<string>("");
   const [gender, setGender] = useState<string>("male");
   const [age, setAge] = useState<any>();
+  const [height, setHeight] = useState<any>();
   const [password, setPassword] = useState<string>("");
   const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
   const storage = window.localStorage;
@@ -26,6 +27,7 @@ const RegisterCard: React.FC = () => {
     setUsername("");
     setPassword("");
     setGender("male");
+    setHeight(0);
     setAge(1);
   };
   //账号信息
@@ -44,6 +46,10 @@ const RegisterCard: React.FC = () => {
   const changeAge = (age: number) => {
     setAge(age);
   };
+  //修改身高
+  const changeHeight = (height: number) => {
+    setHeight(height);
+  };
   //密码信息
   const changePassword = (password: string) => {
     setPassword(password);
@@ -52,10 +58,10 @@ const RegisterCard: React.FC = () => {
   //登录或注册请求
   const sendMessage = () => {
     if (type === "signUp") {
-      if (account === "" || username === "" || password === "") {
+      if (account === "" || username === "" || password === "" || height === "" || age === "") {
         alert("请将信息填写完整！");
       } else {
-        const time = dayjs().format("YYYY-MM-DD");
+        const time = dayjs().format("YYYY-MM-DD HH:mm:ss");
         fetch("http://localhost:4000/api/users/addUser", {
           method: "POST",
           headers: {
@@ -68,6 +74,7 @@ const RegisterCard: React.FC = () => {
             age: age,
             password: password,
             createTime: time,
+            height: height,
           }),
         })
           .then((res) => {
@@ -206,7 +213,7 @@ const RegisterCard: React.FC = () => {
           />
           <div style={{ marginBottom: "1vh" }}>性别：</div>
           <Select
-            defaultValue="lucy"
+            defaultValue="male"
             style={{ marginBottom: "2vh" }}
             onChange={(value) => changeGender(value)}
             value={gender}
@@ -223,6 +230,14 @@ const RegisterCard: React.FC = () => {
             defaultValue={1}
             style={{ marginBottom: "2vh" }}
             onChange={(e) => changeAge(e)}
+          />
+          <div style={{ marginBottom: "1vh" }}>身高(cm)：</div>
+          <InputNumber
+            size="middle"
+            value={height}
+            defaultValue={1}
+            style={{ marginBottom: "2vh" }}
+            onChange={(e) => changeHeight(e)}
           />
         </div>
       ) : null}

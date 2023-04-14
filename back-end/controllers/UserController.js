@@ -2,8 +2,8 @@ const UserService = require("../services/UserService");
 
 const UserController = {
   addUser: async (req, res) => {
-    const { username, gender, age, account, password, createTime } = req.body;
-    const result = await UserService.addUser(username, gender, age, account, password, createTime);
+    const { username, gender, age, account, password, createTime, height } = req.body;
+    const result = await UserService.addUser(username, gender, age, account, password, createTime, height);
     if (result.success) {
       res.send({
         data: result.data,

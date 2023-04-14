@@ -8,6 +8,7 @@ const userSchema = new Schema({
   password: String,
   gender: String,
   age: Number,
+  height: Number,
 });
 
 const UserModel = mongoose.model("user", userSchema);
