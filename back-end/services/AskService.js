@@ -1,4 +1,5 @@
 const AskModel = require("../model/AskModel");
+const AnswerModel = require("../model/AnswerModel");
 
 const AskService = {
   addAsk: (username, userId, title, content, createTime, likeNum, commentNum) => {
@@ -22,6 +23,7 @@ const AskService = {
   },
   deleteAsk: (id) => {
     return AskModel.deleteOne({ _id: id }).then((res) => {
+      AnswerModel.deleteOne({ askId: id });
       if (res.deletedCount == 1) {
         return "success";
       } else {

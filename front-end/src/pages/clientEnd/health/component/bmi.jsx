@@ -7,26 +7,29 @@ const BMI = () => {
   const message = JSON.parse(storage.getItem("message"));
   const height = message.height;
 
-  const getList = (userId, listName) => {
-    fetch("http://localhost:4000/api/records/getList", {
+  const getList = (userId) => {
+    fetch("http://localhost:4000/api/records/getWeightList", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
         userId: userId,
-        listName: listName,
       }),
     })
       .then((res) => {
         return res.json();
       })
       .then((res) => {
-        const list = JSON.parse(res?.data);
-        list?.forEach((item) => {
-          item.scales = item.scales / ((height / 100) * (height / 100));
-        });
-        setData(list);
+        if (res.success) {
+          const list = JSON.parse(res?.data);
+          list?.forEach((item) => {
+            item.scales = item.scales / ((height / 100) * (height / 100));
+          });
+          setData(list);
+        } else {
+          setData([]);
+        }
       })
       .catch(() => {
         alert("网络错误！");
@@ -47,7 +50,7 @@ const BMI = () => {
   };
 
   useEffect(() => {
-    getList(message.id, "weight");
+    getList(message.id);
   }, []);
 
   const config = {

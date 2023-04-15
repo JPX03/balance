@@ -80,22 +80,25 @@ const Weight = () => {
     setWeight(value);
   };
 
-  const getList = (userId, listName) => {
-    fetch("http://localhost:4000/api/records/getList", {
+  const getList = (userId) => {
+    fetch("http://localhost:4000/api/records/getWeightList", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
         userId: userId,
-        listName: listName,
       }),
     })
       .then((res) => {
         return res.json();
       })
       .then((res) => {
-        setData(JSON.parse(res?.data));
+        if (res?.success) {
+          setData(JSON.parse(res?.data));
+        } else {
+          setData([]);
+        }
       })
       .catch(() => {
         alert("网络错误！");
@@ -116,7 +119,7 @@ const Weight = () => {
   };
 
   useEffect(() => {
-    getList(message.id, "weight");
+    getList(message.id);
   }, []);
 
   const config = {
@@ -153,7 +156,7 @@ const Weight = () => {
       style={{ width: "95%", height: "45vh" }}
     >
       <div style={{ height: "50vh", width: "100%" }}>
-        <p style={{ marginBottom: "3vh" }}>身高：175</p>
+        <p style={{ marginBottom: "3vh" }}>身高：{message.height}</p>
         <Row style={{ height: "55%", width: "100%" }}>
           <Col span={12} style={{ height: "100%", width: "100%" }}>
             <Line {...config} style={{ height: "100%", width: "96%" }} />

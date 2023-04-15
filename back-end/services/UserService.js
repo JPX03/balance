@@ -1,4 +1,5 @@
 const UserModel = require("../model/UserModel");
+const RecordModel = require("../model/RecordModel");
 
 const UserService = {
   addUser: (username, gender, age, account, password, createTime, height) => {
@@ -19,6 +20,14 @@ const UserService = {
           gender: gender,
           height: height,
         };
+        RecordModel.create({
+          userId: _id,
+          weight: JSON.stringify([]),
+          bloodFat: JSON.stringify([]),
+          bloodPressure: JSON.stringify([]),
+          bloodSugar: JSON.stringify([]),
+          bodyFatRatio: JSON.stringify([]),
+        });
         return {
           success: true,
           data: data,
@@ -30,6 +39,8 @@ const UserService = {
   },
   deleteUser: (id) => {
     return UserModel.deleteOne({ _id: id }).then((res) => {
+      RecordModel.deleteOne({ userId: id });
+
       if (res.deletedCount == 1) {
         return "success";
       } else {
@@ -56,7 +67,7 @@ const UserService = {
     return UserModel.find({ account: account, password: password }, ["_id", "username", "gender", "height"]).then(
       (res) => {
         if (res.length === 1) {
-          const { _id, username, gender } = res[0];
+          const { _id, username, gender, height } = res[0];
           const data = {
             id: _id,
             username: username,

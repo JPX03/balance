@@ -6,15 +6,61 @@ import { Line } from "@ant-design/plots";
 
 const BodyFatRatio = () => {
   const [data, setData] = useState([]);
+  const [time, setTime] = useState("");
+  const [bodyFatRatio, setBodyFatRatio] = useState(0);
   const [isModalOpen1, setIsModalOpen1] = useState(false);
   const [isModalOpen2, setIsModalOpen2] = useState(false);
+  const storage = window.localStorage;
+  const message = JSON.parse(storage.getItem("message"));
+
   const showModal1 = () => {
     setIsModalOpen1(true);
   };
   const handleOk1 = () => {
-    setIsModalOpen1(false);
+    if (time == "" || time == null) {
+      alert("请输入选择时间");
+    } else {
+      const list = data;
+      let shouldAdd = true;
+      list?.forEach((item) => {
+        if (item.Date == time) {
+          shouldAdd = false;
+          item.scales = bodyFatRatio;
+        }
+      });
+      if (shouldAdd) {
+        list?.push({
+          Date: time,
+          scales: bodyFatRatio,
+        });
+      }
+      fetch("http://localhost:4000/api/records/updateBodyFatRatio", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId: message.id,
+          bodyFatRatio: JSON.stringify(list),
+        }),
+      })
+        .then((res) => {
+          return res.json();
+        })
+        .then((res) => {
+          if (res.success) {
+            alert("修改成功！");
+            setBodyFatRatio(0);
+            setIsModalOpen1(false);
+          }
+        })
+        .catch(() => {
+          alert("网络错误！");
+        });
+    }
   };
   const handleCancel1 = () => {
+    setBodyFatRatio(0);
     setIsModalOpen1(false);
   };
   const showModal2 = () => {
@@ -27,37 +73,68 @@ const BodyFatRatio = () => {
     setIsModalOpen2(false);
   };
   const onDateChange = (date) => {
-    if (date) {
-      console.log("Date: ", date);
-    } else {
-      console.log("Clear");
-    }
+    setTime(date?.format("YYYY-MM-DD"));
   };
   const onNumberChange = (value) => {
-    console.log("changed", value);
+    setBodyFatRatio(value);
+  };
+
+  const getList = (userId) => {
+    fetch("http://localhost:4000/api/records/getBodyFatRatioList", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userId: userId,
+      }),
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((res) => {
+        if (res?.success) {
+          setData(JSON.parse(res?.data));
+        } else {
+          setData([]);
+        }
+      })
+      .catch(() => {
+        alert("网络错误！");
+      });
+  };
+
+  const getMaxMin = (arr) => {
+    let max = arr[0]?.scales;
+    let min = arr[0]?.scales;
+    for (let i = 0; i < arr.length; i++) {
+      if (arr[i]?.scales >= max) {
+        max = arr[i]?.scales;
+      } else {
+        min = arr[i]?.scales;
+      }
+    }
+    return { max: max, min: min };
   };
 
   useEffect(() => {
-    asyncFetch();
+    getList(message.id);
   }, []);
-
-  const asyncFetch = () => {
-    fetch("https://gw.alipayobjects.com/os/bmw-prod/1d565782-dde4-4bb6-8946-ea6a38ccf184.json")
-      .then((response) => response.json())
-      .then((json) => setData(json))
-      .catch((error) => {
-        console.log("fetch data failed", error);
-      });
-  };
 
   const config = {
     data,
     padding: "auto",
     xField: "Date",
     yField: "scales",
+    yAxis: {
+      max: Math.floor(getMaxMin(data).max) + 1,
+      min: Math.floor(getMaxMin(data).min),
+      tickInterval: 3,
+      tickCount: 1,
+    },
     xAxis: {
-      // type: 'timeCat',
-      tickCount: 5,
+      type: "timeCat",
+      tickCount: 10,
     },
   };
 
@@ -92,8 +169,15 @@ const BodyFatRatio = () => {
         />
         <br />
         <br />
-        <span>体重：</span>
-        <InputNumber min={0} max={200} onChange={onNumberChange} placeholder="" />
+        <span>体脂：</span>
+        <InputNumber
+          min={0}
+          max={150}
+          defaultValue={0}
+          value={bodyFatRatio}
+          onChange={onNumberChange}
+          placeholder="单位kg"
+        />
       </Modal>
       <Modal title="建议" open={isModalOpen2} onOk={handleOk2} onCancel={handleCancel2}>
         <p>Some contents...</p>

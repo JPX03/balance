@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 const RecordSchema = new Schema({
   userId: String,
   weight: String,
-  bodyFatRating: String,
+  bodyFatRatio: String,
   bloodFat: String,
   bloodSugar: String,
   bloodPressure: String,
