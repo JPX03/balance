@@ -8,6 +8,7 @@ const BloodFat = () => {
   const [data, setData] = useState([]);
   const [time, setTime] = useState("");
   const [bloodFat, setBloodFat] = useState(0);
+  const [latestBloodFat, setLatestBloodFat] = useState(0);
   const [isModalOpen1, setIsModalOpen1] = useState(false);
   const [isModalOpen2, setIsModalOpen2] = useState(false);
   const storage = window.localStorage;
@@ -94,7 +95,9 @@ const BloodFat = () => {
       })
       .then((res) => {
         if (res?.success) {
-          setData(JSON.parse(res?.data));
+          const list = JSON.parse(res?.data);
+          setData(list);
+          setLatestBloodFat(list[list.length - 1].scales);
         } else {
           setData([]);
         }
@@ -126,12 +129,12 @@ const BloodFat = () => {
     padding: "auto",
     xField: "Date",
     yField: "scales",
-    yAxis: {
-      max: Math.floor(getMaxMin(data).max) + 1,
-      min: Math.floor(getMaxMin(data).min),
-      tickInterval: 3,
-      tickCount: 1,
-    },
+    // yAxis: {
+    // max: Math.floor(getMaxMin(data).max) + 1,
+    // min: Math.floor(getMaxMin(data).min) - 1,
+    // tickInterval: 2,
+    // tickCount: 1,
+    // },
     xAxis: {
       type: "timeCat",
       tickCount: 10,
@@ -141,7 +144,7 @@ const BloodFat = () => {
   return (
     <Card
       hoverable
-      title="血脂"
+      title="血脂(总胆固醇)"
       extra={
         <div>
           <Button type="link" size="small" onClick={showModal1}>
@@ -169,10 +172,10 @@ const BloodFat = () => {
         />
         <br />
         <br />
-        <span>血脂：</span>
+        <span>血脂(总胆固醇)：</span>
         <InputNumber
           min={0}
-          max={150}
+          max={20}
           defaultValue={0}
           value={bloodFat}
           onChange={onNumberChange}
@@ -180,9 +183,11 @@ const BloodFat = () => {
         />
       </Modal>
       <Modal title="建议" open={isModalOpen2} onOk={handleOk2} onCancel={handleCancel2}>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
+        <p>
+          血脂是血浆中的中性脂肪（甘油三酯）和类脂（磷脂、糖脂、固醇、类固醇）的总称，广泛存在于人体中。它们是生命细胞的基础代谢必需物质。一般说来，血脂中的主要成分是甘油三酯和胆固醇，其中甘油三酯参与人体内能量代谢，而胆固醇则主要用于合成细胞浆膜、类固醇激素和胆汁酸。
+        </p>
+        <p>正常水平：其中总胆固醇3~ 5.2 mmol/L，甘油三酯为0.56~1.7mmol/L</p>
+        <p>您最近的总胆固醇为{latestBloodFat}mmol/L</p>
       </Modal>
     </Card>
   );

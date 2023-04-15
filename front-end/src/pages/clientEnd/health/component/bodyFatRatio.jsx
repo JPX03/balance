@@ -8,6 +8,7 @@ const BodyFatRatio = () => {
   const [data, setData] = useState([]);
   const [time, setTime] = useState("");
   const [bodyFatRatio, setBodyFatRatio] = useState(0);
+  const [latestBodyFatRatio, setLatestBodyFatRatio] = useState(0);
   const [isModalOpen1, setIsModalOpen1] = useState(false);
   const [isModalOpen2, setIsModalOpen2] = useState(false);
   const storage = window.localStorage;
@@ -94,7 +95,9 @@ const BodyFatRatio = () => {
       })
       .then((res) => {
         if (res?.success) {
-          setData(JSON.parse(res?.data));
+          const list = JSON.parse(res?.data);
+          setData(list);
+          setLatestBodyFatRatio(list[list.length - 1].scales);
         } else {
           setData([]);
         }
@@ -126,12 +129,12 @@ const BodyFatRatio = () => {
     padding: "auto",
     xField: "Date",
     yField: "scales",
-    yAxis: {
-      max: Math.floor(getMaxMin(data).max) + 1,
-      min: Math.floor(getMaxMin(data).min),
-      tickInterval: 3,
-      tickCount: 1,
-    },
+    // yAxis: {
+    //   max: getMaxMin(data).max + 0.1,
+    //   min: getMaxMin(data).min - 0.1,
+    //   tickInterval: 0.2,
+    //   tickCount: 0.01,
+    // },
     xAxis: {
       type: "timeCat",
       tickCount: 10,
@@ -172,7 +175,7 @@ const BodyFatRatio = () => {
         <span>体脂：</span>
         <InputNumber
           min={0}
-          max={150}
+          max={1}
           defaultValue={0}
           value={bodyFatRatio}
           onChange={onNumberChange}
@@ -180,9 +183,30 @@ const BodyFatRatio = () => {
         />
       </Modal>
       <Modal title="建议" open={isModalOpen2} onOk={handleOk2} onCancel={handleCancel2}>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
+        <p>
+          体脂率是指人体内脂肪重量在人体总体重中所占的比例，又称体脂百分数，它反映人体内脂肪含量的多少。肥胖会提高罹患各种疾病的风险。例如，高血压、糖尿病、高血脂等。而打算怀孕的女性也不能忽视肥胖引起的妊娠并发症与难产的风险。
+        </p>
+        <p>
+          成年人的体脂率正常范围分别是女性20%～25%，男性15%～18%，若体脂率过高，体重超过正常值的20%以上就可视为肥胖。运动员的体脂率可随运动项目而定。一般男运动员为7%～15%，女运动员为12%—25%。
+        </p>
+        <p>你最近的体脂率为：{latestBodyFatRatio}</p>
+        {message?.gender == "male" ? (
+          <p>
+            {latestBodyFatRatio < 0.15
+              ? "您需要适当增加体脂"
+              : latestBodyFatRatio < 0.18
+              ? "当前体脂很健康！"
+              : "您需要适当降低体脂"}
+          </p>
+        ) : (
+          <p>
+            {latestBodyFatRatio < 0.2
+              ? "您需要适当增加体脂"
+              : latestBodyFatRatio < 0.25
+              ? "当前体脂很健康！"
+              : "您需要适当降低体脂"}
+          </p>
+        )}
       </Modal>
     </Card>
   );

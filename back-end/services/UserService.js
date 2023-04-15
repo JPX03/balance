@@ -1,5 +1,7 @@
 const UserModel = require("../model/UserModel");
 const RecordModel = require("../model/RecordModel");
+const AskModel = require("../model/AskModel");
+const AnswerModel = require("../model/AnswerModel");
 
 const UserService = {
   addUser: (username, gender, age, account, password, createTime, height) => {
@@ -40,7 +42,8 @@ const UserService = {
   deleteUser: (id) => {
     return UserModel.deleteOne({ _id: id }).then((res) => {
       RecordModel.deleteOne({ userId: id });
-
+      AskModel.deleteOne({ userId: id });
+      AnswerModel.deleteOne({ userId: id });
       if (res.deletedCount == 1) {
         return "success";
       } else {

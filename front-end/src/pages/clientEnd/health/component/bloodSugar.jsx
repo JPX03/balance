@@ -8,6 +8,7 @@ const BloodSugar = () => {
   const [data, setData] = useState([]);
   const [time, setTime] = useState("");
   const [bloodSugar, setBloodSugar] = useState(0);
+  const [latestBloodSuger, setLatestBloodSuger] = useState(0);
   const [isModalOpen1, setIsModalOpen1] = useState(false);
   const [isModalOpen2, setIsModalOpen2] = useState(false);
   const storage = window.localStorage;
@@ -94,7 +95,9 @@ const BloodSugar = () => {
       })
       .then((res) => {
         if (res?.success) {
-          setData(JSON.parse(res?.data));
+          const list = JSON.parse(res?.data);
+          setData(list);
+          setLatestBloodSuger(list[list.length - 1].scales);
         } else {
           setData([]);
         }
@@ -126,12 +129,12 @@ const BloodSugar = () => {
     padding: "auto",
     xField: "Date",
     yField: "scales",
-    yAxis: {
-      max: Math.floor(getMaxMin(data).max) + 1,
-      min: Math.floor(getMaxMin(data).min),
-      tickInterval: 3,
-      tickCount: 1,
-    },
+    // yAxis: {
+    //   max: Math.floor(getMaxMin(data).max) + 1,
+    //   min: Math.floor(getMaxMin(data).min),
+    //   tickInterval: 3,
+    //   tickCount: 1,
+    // },
     xAxis: {
       type: "timeCat",
       tickCount: 10,
@@ -141,7 +144,7 @@ const BloodSugar = () => {
   return (
     <Card
       hoverable
-      title="血糖"
+      title="血糖(空腹)"
       extra={
         <div>
           <Button type="link" size="small" onClick={showModal1}>
@@ -169,7 +172,7 @@ const BloodSugar = () => {
         />
         <br />
         <br />
-        <span>血糖：</span>
+        <span>血糖(空腹)：</span>
         <InputNumber
           min={0}
           max={150}
@@ -180,9 +183,13 @@ const BloodSugar = () => {
         />
       </Modal>
       <Modal title="建议" open={isModalOpen2} onOk={handleOk2} onCancel={handleCancel2}>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
+        <p>
+          血中的葡萄糖称为血糖（Glu）。葡萄糖是人体的重要组成成分，也是能量的重要来源。正常人体每天需要很多的糖来提供能量，为各种组织、脏器的正常运作提供动力。所以血糖必须保持一定的水平才能维持体内各器官和组织的需要。正常人血糖的产生和利用处于动态平衡的状态，维持在一个相对稳定的水平，这是由于血糖的来源和去路大致相同的结果。
+        </p>
+        <p>
+          正堂的参考范围：空腹：3.92～6.16mmol/L（氧化酶法或己糖激酶法）。餐后：5.1~7.0mmol/L（氧化酶法或己糖激酶法）。
+        </p>
+        <p>您最近的空腹血糖为{latestBloodSuger}mmol/L</p>
       </Modal>
     </Card>
   );

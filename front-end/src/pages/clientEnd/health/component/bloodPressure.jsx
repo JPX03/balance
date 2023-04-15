@@ -8,6 +8,7 @@ const BloodPressure = () => {
   const [data, setData] = useState([]);
   const [time, setTime] = useState("");
   const [bloodPressure, setBloodPressure] = useState(0);
+  const [latestBloodPressure, setLatestBloodPressure] = useState(0);
   const [isModalOpen1, setIsModalOpen1] = useState(false);
   const [isModalOpen2, setIsModalOpen2] = useState(false);
   const storage = window.localStorage;
@@ -94,7 +95,9 @@ const BloodPressure = () => {
       })
       .then((res) => {
         if (res?.success) {
-          setData(JSON.parse(res?.data));
+          const list = JSON.parse(res?.data);
+          setData(list);
+          setLatestBloodPressure(list[list.length - 1].scales);
         } else {
           setData([]);
         }
@@ -126,12 +129,6 @@ const BloodPressure = () => {
     padding: "auto",
     xField: "Date",
     yField: "scales",
-    yAxis: {
-      max: Math.floor(getMaxMin(data).max) + 1,
-      min: Math.floor(getMaxMin(data).min),
-      tickInterval: 3,
-      tickCount: 1,
-    },
     xAxis: {
       type: "timeCat",
       tickCount: 10,
@@ -141,7 +138,7 @@ const BloodPressure = () => {
   return (
     <Card
       hoverable
-      title="血压"
+      title="血压（舒张压）"
       extra={
         <div>
           <Button type="link" size="small" onClick={showModal1}>
@@ -169,7 +166,7 @@ const BloodPressure = () => {
         />
         <br />
         <br />
-        <span>血压：</span>
+        <span>血压（舒张压）：</span>
         <InputNumber
           min={0}
           max={150}
@@ -180,9 +177,15 @@ const BloodPressure = () => {
         />
       </Modal>
       <Modal title="建议" open={isModalOpen2} onOk={handleOk2} onCancel={handleCancel2}>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
+        <p>
+          血压（bloodpressure，BP）是指血液在血管内流动时作用于单位面积血管壁的侧压力，它是推动血液在血管内流动的动力。在不同血管内被分别称为动脉血压、毛细血管压和静脉血压，通常所说的血压是指体循环的动脉血压。
+        </p>
+        <p>
+          1.正常血压 正常成人安静状态下的血压范围较稳定，正常范围收缩压90～139mmHg，舒张压60～89mmHg，脉压30～40mmHg。
+          2.异常血压 （1）高血压：未使用抗高血压药的前提下，18岁以上成人收缩压≥140mmHg和（或）舒张压≥90mmHg。
+          （2）低血压：收缩压≤90mmHg和（或）舒张压≤60mmHg。
+        </p>
+        <p>您最近的血压（舒张压）为{latestBloodPressure}mmHg</p>
       </Modal>
     </Card>
   );

@@ -9,10 +9,12 @@ const Weight = () => {
   const [data, setData] = useState([]);
   const [time, setTime] = useState("");
   const [weight, setWeight] = useState(0);
+  const [latestWeight, setLatestWeight] = useState(0);
   const [isModalOpen1, setIsModalOpen1] = useState(false);
   const [isModalOpen2, setIsModalOpen2] = useState(false);
   const storage = window.localStorage;
   const message = JSON.parse(storage.getItem("message"));
+  const height = message.height;
 
   const showModal1 = () => {
     setIsModalOpen1(true);
@@ -53,6 +55,7 @@ const Weight = () => {
             alert("修改成功！");
             setWeight(0);
             setIsModalOpen1(false);
+            window.location.reload();
           }
         })
         .catch(() => {
@@ -95,7 +98,9 @@ const Weight = () => {
       })
       .then((res) => {
         if (res?.success) {
-          setData(JSON.parse(res?.data));
+          const list = JSON.parse(res?.data);
+          setData(list);
+          setLatestWeight(list[list.length - 1].scales);
         } else {
           setData([]);
         }
@@ -186,7 +191,15 @@ const Weight = () => {
           一般认为，数值在18.5~23.9之间为成年人的标准身高质量指数，超过24即为超重，超过28即为肥胖，35以上就是病态肥胖。
         </p>
         <br></br>
-        <p>你当前的体重为：65kg,BMI为：21.2,身材标准，请继续保持！</p>
+        <p>{`你最近的体重为：${latestWeight}kg`}</p>
+        <p>{`你最近的BMI为：${(latestWeight / ((height / 100) * (height / 100))).toFixed(4)}`}</p>
+        <p>
+          {latestWeight / ((height / 100) * (height / 100)) <= 18.5
+            ? "您可以适当增重！"
+            : latestWeight / ((height / 100) * (height / 100)) <= 23.9
+            ? "您现在比较健康，请继续保持！"
+            : "您需要适当减重！"}
+        </p>
       </Modal>
     </Card>
   );
